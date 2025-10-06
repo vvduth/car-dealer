@@ -1,0 +1,38 @@
+feat: Implement and stabilize customer/vehicle management
+
+This commit introduces a new "Add Customer" feature, includes a major refactor of the vehicle reservation and car forms, and resolves a series of critical state management, styling, and logic bugs.
+
+### Features
+
+- **Add Customer Functionality:**
+  - A new "Add Customer" button has been added to the `/admin/customers` page.
+  - This links to a new `/admin/customers/new` page for manual customer creation.
+  - The `EditCustomerForm` has been refactored to support both "create" and "edit" modes, promoting code reuse and UI consistency.
+  - A `createManualCustomerAction` server action was added to handle the creation of new customers from the admin panel.
+
+- **Enhanced Reservation UX:**
+  - The multi-step reservation form was refactored into a single, streamlined page for a smoother user experience.
+  - A modern calendar date picker (`shadcn/ui Calendar`) has been implemented for date selection, replacing the previous dropdown.
+
+### Bug Fixes & Refactoring
+
+- **Car Form Stabilization (Edit/Create):**
+  - Fixed a critical bug where the `description` field would clear itself upon user input. This was resolved by adding a `useEffect` hook to `car-form.tsx` to properly synchronize the form state with the `car` prop.
+  - Resolved a race condition where `model` and `modelVariant` dropdowns would not show the selected value on page load. This was fixed by moving the async taxonomy data fetching to the parent `car-form.tsx` and passing options down as props, eliminating timing issues.
+  - Eradicated a recurring "uncontrolled to controlled input" error by ensuring all numeric form fields are initialized with `null` instead of `undefined` or `""`, which is the correct initial value for the `react-number-format` component.
+
+- **Reservation Flow & Styling:**
+  - Resolved a persistent issue where the reservation form header was rendered twice. The root cause was an incorrect `layout.tsx` file at the route level (`/reserve/layout.tsx`) that was erroneously rendering a duplicate, prop-less header. This layout has been corrected.
+  - The reservation success page (`/success`) has been restyled to be compatible with the dark theme and now displays a summary of the booking.
+  - The car card layout has been improved with flexbox to ensure the footer content is always aligned to the bottom, regardless of description length.
+
+- **Customer & Action Logic:**
+  - Fixed a critical bug where updating a customer would create false change logs for `carTitle` and `notes`. The change detection logic in `updateCustomerAction` was improved to correctly differentiate between `null` database values and `""` empty strings from the form.
+  - Corrected a `ReferenceError` in `createManualCustomerAction` by importing the `redirect` function. The action was also refactored to prevent the expected `NEXT_REDIRECT` exception from being caught and logged as an error.
+  - Fixed a bug where the manually entered `carTitle` for new customers was not being displayed in the main customer list table.
+  - Corrected text colors in the "Customer Lifecycle" table on the customer edit page to ensure readability in dark mode.
+
+### Chores
+
+- **Component Architecture:** The reservation page and car form were refactored to better separate concerns (data-fetching vs. UI), leading to more stable and predictable components.
+- **Dependency Management:** Added `calendar` and `popover` components from `shadcn/ui`.

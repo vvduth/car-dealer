@@ -36,7 +36,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
     <section
       className="relative flex items-center justify-center h-[calc(100vh-4rem)] bg-cover bg-center"
       style={{
-        backgroundImage: `url(${imgixLoader({ src: imageSources.carLineup, width: 1280, quality: 100 })})`,
+        backgroundImage: `url('/assets/hero-bg.jpg')`,
       }}
     >
       <div className="absolute inset-0 bg-gray-900 opacity-75" />
@@ -46,14 +46,14 @@ const HeroSection = async (props: AwaitedPageProps) => {
             className="text-2xl text-center lg:text-left md:text-4xl lg:text-8xl uppercase
              font-bold text-white"
           >
-            STRAIGHT FIRE WHIPS AT CRAZY PRICES
+            Your Next Chapter, Curated.
           </h1>
           <h2 className="mt-4 uppercase text-center lg:text-left text-base md:text-3xl lg:text-4xl text-white">
-            GET YOUR RIDE OR DIE TODAY
+            At RIM GLOBAL, we've reimagined the pre-owned car experience for Federal Way. Explore our meticulously curated collection of quality-inspected vehicles and discover the confidence of a transparent, hassle-free journey.
           </h2>
         </div>
         <div
-          className="max-w-md w-full mx-auto p-6 bg-white 
+          className="max-w-md w-full mx-auto p-6 bg-secondary 
           sm:rounded-xl shadow-lg"
         >
           <div className="space-y-4">
@@ -63,12 +63,12 @@ const HeroSection = async (props: AwaitedPageProps) => {
                 minMaxValue={minMaxResult}
               />
             </div>
-            <SearchButton count={carsCount} />
+            <SearchButton count={carsCount} label="Discover The Collection" />
             {isFilterApplied && (
 							<Button
 								asChild
 								variant="outline"
-								className="w-full hover:bg-slate-200"
+								className="w-full hover:bg-accent"
 							>
 								<Link href={routes.home}>
 									Clear Filters ({totalFiltersApplied})

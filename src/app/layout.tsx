@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Mulish, Roboto } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
@@ -22,9 +21,8 @@ const roboto = Roboto({
 	display: "swap",
 });
 export const metadata: Metadata = {
-  title: "Meat Motors",
-  description: "Love meat? Love motors? We do too! Welcome to Meat Motors",
-};
+  title: "RIM GLOBAL",
+  description: "Federal Way's Curated Automotive Collection",};
 
 export default function RootLayout({
   children,
@@ -32,24 +30,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
       <body
 				className={cn(
-					"antialiased overscroll-none bg-background font-heading",
+					"antialiased bg-background font-heading",
 					roboto.variable,
 					mulish.variable,
 				)}
 			>
         <NextTopLoader showSpinner={true} />
         <NuqsAdapter>
-			<Suspense>
-				{children}
-			</Suspense>
-		</NuqsAdapter>
+            <Suspense>
+                {children}
+            </Suspense>
+        </NuqsAdapter>
         <Toaster />
       </body>
     </html>
-	
   );
 }

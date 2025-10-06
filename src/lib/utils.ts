@@ -54,6 +54,10 @@ export function formatTransmission(transmission: Transmission) {
   return transmission === Transmission.AUTOMATIC ? "Automatic" : "Manual";
 }
 
+export function formatSimpleDate(date: Date) {
+  return new Date(date).toISOString().split('T')[0];
+}
+
 export function formatFuelType(fuelType: FuelType) {
   switch (fuelType) {
     case FuelType.PETROL:

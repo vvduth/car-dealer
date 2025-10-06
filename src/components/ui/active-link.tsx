@@ -19,8 +19,8 @@ const ActiveLink = (props: ActiveLinkProps) => {
 			className={cn(
 				className,
 				isActive
-					? "bg-sky-600 text-sky-600-foreground hover:bg-sky-600"
-					: "text-muted hover:bg-white/10",
+					? "bg-primary text-primary-foreground hover:bg-primary/90"
+					: "text-muted-foreground hover:bg-white/10",
 			)}
 		>
 			{children}

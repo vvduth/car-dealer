@@ -25,7 +25,7 @@ export async function issueChallenge(userId: string, email: string) {
 
   await redis.setex(`${REDIS_PREFIX}:uid-${userId}`, 60 * 60, challenge);
   const { error } = await resend.emails.send({
-    from: `Meat motors <${SENDER_EMAIL}>`,
+    from: `RIM GLOBAL <${SENDER_EMAIL}>`,
     to: email,
     subject: "Your OTP Code",
     html: `<p>${code}</p>`,

@@ -30,12 +30,11 @@ export const SearchButton = ({ count }: { count: number }) => {
 	if (minPrice) queryParams.append("minPrice", minPrice);
 	if (maxPrice) queryParams.append("maxPrice", maxPrice);
 
-	const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
-	url.search = queryParams.toString();
+	const relativeUrl = `${routes.inventory}?${queryParams.toString()}`;
 
 	return (
 		<Button className="w-full" asChild>
-			<Link href={url.toString()}>
+			<Link href={relativeUrl}>
 				Search {count > 0 ? ` (${count})` : null}
 			</Link>
 		</Button>

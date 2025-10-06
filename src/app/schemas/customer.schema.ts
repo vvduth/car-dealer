@@ -23,8 +23,15 @@ export const CreateCustomerSchema = SubmitDetailsSchema.extend({
 export type CreateCustomerType = z.infer<typeof CreateCustomerSchema>;
 
 export const editCustomerSchema = z.object({
-	status: z.nativeEnum(CustomerStatus)
-})
+  status: z.nativeEnum(CustomerStatus),
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.string().email(),
+  mobile: z.string().optional(),
+  carTitle: z.string().optional(),
+  notes: z.string().optional(),
+  bookingDate: z.coerce.date().optional(),
+});
 
 export type EditCustomerType = z.infer<typeof editCustomerSchema>;
 

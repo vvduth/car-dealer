@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { FuelType, BodyType, Transmission, Colour, ULEZCompliance, OdoUnit, ClassifiedStatus, CurrencyCode } from "@prisma/client";
 import {
   Dialog,
   DialogContent,
@@ -8,81 +9,73 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { readStreamableValue, useActions, useUIState } from "ai/rsc";
-import { AI } from "@/app/_actions/ai";
-
 import React, { useState, useTransition } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  SingleImageSchema,
-  SingleImageType,
-} from "@/app/schemas/images.schema";
-import { StreamableSkeletonProps } from "./StreamableSkeletion";
-import { CarAISchema } from "@/app/schemas/car-ai";
-import { z } from "zod";
 import { createCarAction } from "@/app/_actions/car";
 import { toast } from "sonner";
 import { Form } from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
-import SingleImageUploader from "./SingleImageUploader";
+import CarFormField from "../../car/car-form-fields";
+import { CreateCarType, createCarSchema } from "@/app/schemas/car.schema";
+import MultiImageUploader from "../../car/mutil-image-uploader";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
 
 const CreateCarDialog = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUploading, startUploadTransition] = useTransition();
   const [isCreating, startCreateTransition] = useTransition();
 
-  const { generateCar } = useActions<typeof AI>();
-  const [messages, setMessages] = useUIState<typeof AI>();
-
-  const imageForm = useForm<SingleImageType>({
-    resolver: zodResolver(SingleImageSchema),
+  const form = useForm<CreateCarType>({
+    resolver: zodResolver(createCarSchema),
+    defaultValues: {
+      images: [],
+      year: "",
+      make: "",
+      model: "",
+      modelVariant: "",
+      description: "",
+      vrm: "",
+      odoReading: undefined,
+      price: undefined,
+      doors: undefined,
+      seats: undefined,
+      fuelType: FuelType.PETROL,
+      bodyType: BodyType.SEDAN,
+      transmission: Transmission.AUTOMATIC,
+      colour: Colour.BLACK,
+      ulezCompliance: ULEZCompliance.EXEMPT,
+      odoUnit: OdoUnit.MILES,
+      status: ClassifiedStatus.FOR_SALE,
+      currency: CurrencyCode.EUR,
+    },
   });
 
-  const createForm = useForm<StreamableSkeletonProps>({
-    resolver: zodResolver(
-      CarAISchema.extend({
-        make: z.object({
-          id: z.number().int(),
-          name: z.string(),
-          image: z.string(),
-          createdAt: z.date(),
-          updatedAt: z.date(),
-        }),
-      })
-    ),
-  });
-
-  const handleImageUpload = async (url: string) => {
-    imageForm.setValue("image", url);
-  };
-
-  const onImageSubmit: SubmitHandler<SingleImageType> = async (data) => {
-    startUploadTransition(async () => {
-      const responseMessage = await generateCar(data.image);
-      if (!responseMessage) return;
-      setMessages((prev) => [...prev, responseMessage]);
-      for await (const value of readStreamableValue(responseMessage.car)) {
-        if (value) {
-          createForm.reset(value);
-        }
-      }
-    });
-  };
-
-  const onCreateSubmit: SubmitHandler<StreamableSkeletonProps> = (data) => {
+  const onCreateSubmit: SubmitHandler<CreateCarType> = (data) => {
     startCreateTransition(async () => {
-      setMessages([]);
-      const { success, message } = await createCarAction(data);
-
-      if (!success) {
+      const result = await createCarAction(data);
+      if (result?.success) {
+        toast.success("Success", {
+          description: "Car created successfully",
+          duration: 3000,
+        });
+        setIsModalOpen(false);
+        form.reset();
+      } else {
         toast.error("Error", {
-          description: message || "Something went wrong",
+          description: result?.message || "Something went wrong",
           duration: 3000,
         });
       }
     });
   };
+
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
@@ -90,72 +83,53 @@ const CreateCarDialog = () => {
           Add new
         </Button>
       </DialogTrigger>
-      <DialogContent className={cn(` bg-white max-w-7xl`)}>
-        <DialogHeader>
+      <DialogContent className={cn(`bg-card max-w-6xl`)}>        <DialogHeader>
           <DialogTitle>Create new car</DialogTitle>
         </DialogHeader>
-        {messages.length ? (
-          <Form {...createForm}>
-            <form
-              className="space-y-4"
-              onSubmit={createForm.handleSubmit(onCreateSubmit)}
-            >
-              {messages.map((message) => (
-                <div className="w-full" key={message.id}>
-                  {message.display}
-                </div>
-              ))}
-              <div className="flex justify-between gap-2">
-                <Button
-                  variant="outline"
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  disabled={isCreating || isUploading}
-                  type="submit"
-                  className="flex items-center gap-x-2"
-                >
-                  {isCreating || isUploading ? (
-                    <Loader2 className="animate-spin h-4 w-4" />
-                  ) : null}
-                  {isUploading ? "Uploading..." : "Create"}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        ) : (
-          <Form {...imageForm}>
-            <form
-              onSubmit={imageForm.handleSubmit(onImageSubmit)}
-              className="space-y-4"
-            >
-              <SingleImageUploader onUploadComplete={handleImageUpload} />
-              <div className="flex justify-between gap-2">
-                <Button
-                  variant={"outline"}
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  disabled={isUploading}
-                  type="submit"
-                  className="flex items-center gap-x-2"
-                >
-                  {isUploading ? (
-                    <Loader2 className="animate-spin h-4 w-4" />
-                  ) : (
-                    "Upload Image"
+        <Form {...form}>
+          <form
+            className="space-y-4"
+            onSubmit={form.handleSubmit(onCreateSubmit)}
+          >
+            <div className="w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <CarFormField />
+               <div className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="images"
+                  render={({ field: { name, onChange } }) => (
+                    <FormItem>
+                      <FormLabel className="text-muted" htmlFor="images">
+                        Images (up to 8)
+                      </FormLabel>
+                      <FormControl>
+                        <MultiImageUploader name={name} onChange={onChange} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </Button>
+                />
               </div>
-            </form>
-          </Form>
-        )}
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                disabled={isCreating}
+                type="submit"
+                className="flex items-center gap-x-2"
+              >
+                {isCreating && <Loader2 className="animate-spin h-4 w-4" />}
+                Create Car
+              </Button>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

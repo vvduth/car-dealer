@@ -83,7 +83,7 @@ const AdminSidebar = () => {
                   transition={{ duration: 0.4 }}
                 >
                   <Image
-                    alt="Meat motors logo"
+                    alt="RIM GLOBAL logo"
                     src={"/logo.svg"}
                     fill={true}
                     className="object-contain object-left"

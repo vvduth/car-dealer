@@ -1,141 +1,66 @@
 "use client";
-import { subscribeAction } from "@/app/_actions/subscribe";
-import React, { useEffect, useRef } from "react";
-import { useActionState } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubscribeSchema } from "@/app/schemas/sub.schema";
+import { SubscribeSchema, SubscribeSchemaType } from "@/app/schemas/sub.schema";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { CircleCheckIcon, Loader2 } from "lucide-react";
-import { useFormStatus } from "react-dom";
+import { subscribeAction } from "@/app/_actions/subscribe";
+import { toast } from "sonner";
 
-const SubscribeButton = () => {
-	const { pending } = useFormStatus();
-
-	return (
-		<Button
-			disabled={pending}
-			type="submit"
-			className="w-full uppercase font-bold"
-		>
-			{pending && (
-				<Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />
-			)}{" "}
-			Subscribe Now
-		</Button>
-	);
-};
 const NewsLetterForm = () => {
-  const [state, formAction, pending] = useActionState(subscribeAction, {
-    success: false,
-    message: "",
-  });
-
-  const form = useForm({
+  const [isPending, startTransition] = useTransition();
+  const form = useForm<SubscribeSchemaType>({
     resolver: zodResolver(SubscribeSchema),
-    mode: "onChange",
+    defaultValues: {
+      email: "",
+    },
   });
 
-  const handleFormAction = async (formdata: FormData) => {
-    const valid = await form.trigger();
-    if (!valid) {
-      return;
-    }
-    formAction(formdata);
+  const onSubmit = (data: SubscribeSchemaType) => {
+    startTransition(async () => {
+      const response = await subscribeAction(data);
+      if (response.success) {
+        toast.success("Subscribed!", {
+          description: response.message,
+        });
+        form.reset();
+      } else {
+        toast.error("Error", {
+          description: response.message,
+        });
+      }
+    });
   };
 
-  const formRef = useRef<HTMLFormElement>(null);
-  useEffect(() => {
-    if (state.success && formRef.current) {
-      formRef.current.reset();
-    }
-  }, [state.success]);
   return (
-    <div className="space-y-4">
-      <h3 className="text-xl font-bold text-primary">
-        Subcribe to our inevntory updates
-      </h3>
-      <p className="text-gray-700">
-        Enter your details to get new stock updates
-      </p>
-      <Form {...form}>
-        <form
-          action={handleFormAction}
-          onSubmit={() => null}
-          ref={formRef}
-          className="space-y-2"
-        >
-          <div className="grid grid-cols-2 space-x-2">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="First Name"
-                      {...field}
-                      className="bg-white"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Last Name"
-                      {...field}
-                      className="bg-white"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            
-          </div>
-          <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Email"
-                      type="email"
-                      {...field}
-                      className="bg-white w-full"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <SubscribeButton />
-
-            {state.success && (
-                <div className="flex items-center gap-2 rounded-md bg-green-500
-                p-3 text-white">
-                    <CircleCheckIcon className="h-5 w-5" />
-                    <span>Success! {state.message}</span>
-                </div>
-            )}
-
-            {!state.success && state.message && (
-                <div className="flex items-center gap-2 rounded-md bg-red-500
-                p-3 text-white">
-                    <CircleCheckIcon className="h-5 w-5" />
-                    <span>Error! {state.message}</span>
-                </div>
-            )}
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex w-full max-w-md items-center space-x-2"
+      >
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem className="flex-grow">
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <Button type="submit" variant="default" disabled={isPending}>
+          {isPending ? "Subscribing..." : "Subscribe"}
+        </Button>
+      </form>
+    </Form>
   );
 };
 

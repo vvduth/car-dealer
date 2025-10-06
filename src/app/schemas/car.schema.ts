@@ -66,3 +66,6 @@ export const updateCarSchema = z.object({
 });
 
 export type UpdateCarType = z.infer<typeof updateCarSchema>;
+
+export const createCarSchema = updateCarSchema.omit({ id: true });
+export type CreateCarType = z.infer<typeof createCarSchema>;

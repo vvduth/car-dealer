@@ -98,7 +98,13 @@ const DialogFilters = ({
       });
     }
 
-    router.refresh();
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (value) {
+      newSearchParams.set(name, value);
+    } else {
+      newSearchParams.delete(name);
+    }
+    router.push(`${routes.inventory}?${newSearchParams.toString()}`);
   };
 
   return (

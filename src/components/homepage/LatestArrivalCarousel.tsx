@@ -38,7 +38,6 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
 				}}
 				pagination={{ clickable: true }}
 				modules={[Navigation]}
-				loop={true}
 				spaceBetween={30}
 				slidesPerView={1}
 				breakpoints={{
@@ -62,8 +61,8 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
 				})}
 			</Swiper>
 			<SwiperButton
-				prevClassName="-left-16 border border-2 border-border hidden lg:flex"
-				nextClassName="-right-16 border border-2 border-border hidden lg:flex"
+				prevClassName="-left-8 lg:-left-16 border border-2 border-border flex"
+				nextClassName="-right-8 lg:-right-16 border border-2 border-border flex"
 			/>
     </div>
   )

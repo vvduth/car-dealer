@@ -19,9 +19,9 @@ const LastestArrival = async () => {
     const sourceId = await getSourceId();
 	const favourites = await redis.get<Favourites>(sourceId || "");
   return (
-    <section className="py-16 sm:py-24">
+    <section className="py-16 sm:py-24 bg-secondary">
 			<div className="container mx-auto max-w-[80vw]">
-				<h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+				<h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
 					Latest Arrivals
 				</h2>
 				<LatestArrivalsCarousel

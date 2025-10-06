@@ -2,7 +2,7 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import { useFormStatus } from 'react-dom'
-import { Loader2 } from 'lucide-react'
+import { Loader2, LogOut } from 'lucide-react'
 import { signOutAction } from '@/app/_actions/sign-out'
 
 
@@ -13,12 +13,13 @@ const SignOutButton = () => {
         <Button
             type='submit'
             disabled={pending}
-            className='flex items-center gap-2'
+            variant={"outline"}
+            size={"icon"}
         >
-            {pending ? (<Loader2
-            
-            className='mr-2 h-4 w-4 animate-spin'/>):(
-                <span>Sign Out</span>
+            {pending ? (
+                <Loader2 className='h-4 w-4 animate-spin'/>
+            ):(
+                <LogOut className="w-6 h-6 text-destructive" />
             )}
         </Button>
     )

@@ -115,7 +115,7 @@ const InventoryPage = async (props: PageProps) => {
     <div className="flex">
       {/* <Sidebar/> */}
       <Sidebar minMaxValue={minMaxresult} searchParams={searchParams} />
-      <div className="flex-1 p-4 bg-white">
+      <div className="flex-1 p-4 bg-background">
         {/* add xl flex-row if u want */}
         <div className="flex space-y-2 flex-col items-center justify-center pb-4 -mt-1">
           <div className="flex justify-between items-center w-full">
@@ -137,7 +137,7 @@ const InventoryPage = async (props: PageProps) => {
               paginationPrevious: "",
               paginationNext: "",
               paginationLink: "border active:border",
-              paginationLinkActive: "bg-sky-500 text-white",
+              paginationLinkActive: "bg-primary text-primary-foreground",
             }}
           />
           <Suspense
@@ -158,7 +158,7 @@ const InventoryPage = async (props: PageProps) => {
             paginationPrevious: "",
             paginationNext: "",
             paginationLink: "border active:border",
-            paginationLinkActive: "bg-sky-500 text-white",
+            paginationLinkActive: "bg-primary text-primary-foreground",
           }}
         />
       </div>

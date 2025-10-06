@@ -12,6 +12,9 @@ export async function mapToTaxonomyOrCreate(
     object: MapToTaxonomyOrCreateType
 ) {
     // find the make in db i.e Audi
+    if (object.make === 'Unknown') {
+        return null;
+    }
     const make = await prisma.make.findFirst({
         where: {
             name: {equals: object.make,

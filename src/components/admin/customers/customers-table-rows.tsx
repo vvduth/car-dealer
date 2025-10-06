@@ -25,7 +25,8 @@ export const CustomerTableRow = (customer: CustomerWithCar) => {
 			<TableCell className="hidden md:table-cell">{customer.email}</TableCell>
 			<TableCell className="hidden md:table-cell">{customer.mobile}</TableCell>
 			<TableCell className="hidden md:table-cell">
-				{customer.classified?.title} ({customer.classified?.vrm})
+				{customer.carTitle || customer.classified?.title || "N/A"}
+        {customer.classified?.vrm && ` (${customer.classified.vrm})`}
 			</TableCell>
 			<TableCell className="hidden md:table-cell">
 				{format(customer.createdAt, "do MMM yyy HH:mm")}

@@ -13,12 +13,12 @@ const CarsTableRow = ({ car }: { car: CarWithImages }) => {
     <TableRow className="text-gray-500 border-white/45">
       <TableCell className="font-medium">{car.id}</TableCell>
       <TableCell className="p-0">
-        <Image
-          src={car.images[0].src || "/placeholder.png"}
-          alt={car.images[0].alt || "Car Image"}
-          width={120}
-          height={100}
-          className="aspect-3/2 object-cover rounded"
+		<Image
+		  src={car.images?.[0]?.src || "/placeholder.png"}
+		  alt={car.images?.[0]?.alt || "Car Image"}
+		  width={120}
+		  height={100}
+		  className="aspect-3/2 object-cover rounded"
         />
       </TableCell>
       <TableCell className="hidden md:table-cell">{car.title}</TableCell>

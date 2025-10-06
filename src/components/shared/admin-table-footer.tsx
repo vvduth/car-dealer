@@ -47,17 +47,18 @@ export const AdminTableFooter = (props: AdminTableFooterProps) => {
                     colSpan={cols}
                 >
                     <div className="flex items-center">
-                        <Select 
-                            name="itemsPerPage"
-							value={searchParams?.itemsPerPage as string}
-							onChange={handleItemsPerPageChange}
-							options={itemsPerPageOptions}
-							disabled={disabled}
-							className="-mt-1"
-							noDefault={false}
-							selectClassName="bg-primary-800 text-muted/75 border-primary-800"
-                        />
-                        <CustomPagination 
+                                            <Select
+                                              value={searchParams.itemsPerPage || "10"}
+                                              options={["10", "20", "50"].map((value) => ({
+                                                label: `Show ${value}`,
+                                                value,
+                                              }))}                                    onChange={(e) => {
+                                      const url = new URL(baseURL, window.location.origin);
+                                      url.searchParams.set("itemsPerPage", e.target.value);
+                                      router.push(url.toString());
+                                    }}
+                                    noDefault
+                                  />                        <CustomPagination 
                             totalPages={totalPages}
                             baseURL={baseURL}
                             styles={{

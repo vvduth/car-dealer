@@ -1,4 +1,4 @@
-import PublicLayout from '@/components/layouts/public-payout';
+import PublicLayout from '@/components/layouts/public-layout';
 import React from 'react'
 
 

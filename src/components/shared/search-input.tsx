@@ -51,7 +51,7 @@ const SearchInput = (props: SearchInputProps) => {
   }
   return (
     <form action="" className="relative flex-1">
-      <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+      <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
       <Input
         ref={inputRef}
         defaultValue={q || ""}
@@ -62,7 +62,7 @@ const SearchInput = (props: SearchInputProps) => {
       />
       {q && (
         <XIcon
-         className="absolute right-2.5 top-2.5 h-4 w-4 text-white bg-gray-500
+         className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground bg-muted
          p-0.5 rounded-full cursor-pointer"
             onClick={clearSearch}
         />

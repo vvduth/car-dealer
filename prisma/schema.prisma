@@ -26,6 +26,7 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   sessions       Session[]
+  customerUpdates CustomerLifecycle[]
 
   @@map("users")
 }
@@ -126,6 +127,8 @@ model Customer {
   lastName      String              @map("last_name")
   email         String
   mobile        String?
+  carTitle      String?
+  notes         String?
   bookingDate   DateTime?           @map("booking_date")
   termsAccepted Boolean             @default(false) @map("terms_accepted")
   status        CustomerStatus      @default(INTERESTED)
@@ -141,8 +144,10 @@ model Customer {
 model CustomerLifecycle {
   id         Int            @id @default(autoincrement())
   customerId Int            @map("customer_id")
-  oldStatus  CustomerStatus @map("old_status")
   newStatus  CustomerStatus @map("new_status")
+  change     String
+  updatedById String? @map("updated_by_id")
+  updatedBy   User?   @relation(fields: [updatedById], references: [id])
   createdAt  DateTime       @default(now()) @map("created_at")
   updatedAt  DateTime       @updatedAt @map("updated_at")
   customer   Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)

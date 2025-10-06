@@ -27,13 +27,11 @@ export const SignInAction = async (_: PrevState, formData: FormData) => {
         message: error?.message || "Invalid input",
       };
     }
-    await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: true,
-      redirectTo: routes.challenge,
-    });
-
+          await signIn("credentials", {
+            email: data.email,
+            password: data.password,
+            redirect: false,
+          });
     return {
       success: true,
       message: "Sign in successful",

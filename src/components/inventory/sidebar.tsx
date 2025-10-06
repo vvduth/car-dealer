@@ -99,10 +99,16 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
       });
     }
 
-    router.refresh();
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (value) {
+      newSearchParams.set(name, value);
+    } else {
+      newSearchParams.delete(name);
+    }
+    router.push(`${routes.inventory}?${newSearchParams.toString()}`);
   };
   return (
-    <div className="py-4 w-[21.25rem] bg-white border-r border-muted hidden lg:block">
+    <div className="py-4 w-[21.25rem] bg-card border-r border-muted hidden lg:block">
       <div>
         <div className="text-lg font-semibold flex justify-between px-4">
           <span>Filters</span>
@@ -111,7 +117,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
             onClick={clearFilters}
             aria-disabled={filterCount === 0}
             className={cn(
-              `text-sm text-gray-500`,
+              `text-sm text-muted-foreground`,
               !filterCount
                 ? "disabled opacity-50 pointer-events-none cursor-default"
                 : "hover:underline cursor-pointer"

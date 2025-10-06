@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["http://10.53.18.105:3000"],
   /* config options here */
   compress: true,
   images: {
@@ -8,7 +9,6 @@ const nextConfig: NextConfig = {
 	},
   experimental: {
     authInterrupts: true,
-		nodeMiddleware: true,
 		reactCompiler: true,
 		optimizeCss: true,
 		optimizeServerReact: true,

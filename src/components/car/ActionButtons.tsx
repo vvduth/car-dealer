@@ -42,7 +42,7 @@ const ActionButtons = ({ car }: { car: CarWithImages }) => {
         )}
       </Button>
       <Button
-        className="p-2 h-fit"
+        className="p-2 h-fit bg-white hover:bg-gray-200 text-gray-800"
         asChild
         data-tooltip-id="view-tooltip"
         data-tooltip-content="View Car"
@@ -52,7 +52,7 @@ const ActionButtons = ({ car }: { car: CarWithImages }) => {
           <EyeIcon className="h-4 w-4" />
         </Link>
       </Button>
-      <Button variant={"secondary"} className="p-2 h-fit" asChild
+      <Button className="p-2 h-fit bg-blue-600 hover:bg-blue-700 text-white" asChild
         data-tooltip-id="edit-tooltip"
         data-tooltip-content="Edit Car"
       >

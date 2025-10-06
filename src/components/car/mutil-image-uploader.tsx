@@ -1,6 +1,6 @@
 "use client";
 import { UpdateCarType } from "@/app/schemas/car.schema";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { v4 as uuidv4 } from "uuid";
@@ -34,6 +34,7 @@ export type CarImages = UpdateCarType["images"];
 interface MultiImageUploaderProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
+  value?: CarImages;
 }
 
 type ImageProgess = {
@@ -42,7 +43,7 @@ type ImageProgess = {
 };
 
 const MultiImageUploader = (props: MultiImageUploaderProps) => {
-  const { className, ...rest } = props;
+  const { className, value, ...rest } = props;
   const form = useFormContext<UpdateCarType>();
   const { fields, replace } = useFieldArray({
     control: form.control,
@@ -52,6 +53,12 @@ const MultiImageUploader = (props: MultiImageUploaderProps) => {
   const [items, setItems] = useState<CarImages>(fields);
   const [progress, setProgress] = useState<ImageProgess[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    if (value) {
+      setItems(value);
+    }
+  }, [value]);
 
   const handleItemProgress = useCallback((updates: ImageProgess) => {
     setProgress((prev) => {
@@ -121,12 +128,7 @@ const MultiImageUploader = (props: MultiImageUploaderProps) => {
               percentage: 100,
             }));
             setItems(clone);
-            replace(
-              clone.map((item) => ({
-                src: item.src,
-                alt: item.alt,
-              }))
-            );
+            replace(clone);
             setIsUploading(false);
           });
         uploader.start();

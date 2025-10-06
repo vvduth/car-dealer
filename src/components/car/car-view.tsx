@@ -3,7 +3,7 @@ import React from "react";
 import CarCarousel from "./car-carousel";
 import Image from "next/image";
 import { formatBodyType, formatColour, formatFuelType, formatNumber, formatOdometerUnit, formatPrice, formatTransmission } from "@/lib/utils";
-import HtmlParser from "../shared/htmlParser";
+import parse from "html-react-parser";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { routes } from "@/config/routes";
@@ -116,10 +116,9 @@ const CarView = (props: CarWithImagesAndMake) => {
           </div>
           <div className="mb-4">
             {props.description && (
-             <div>
-               <HtmlParser 
-              html={props.description} />
-             </div>
+            <div className="prose dark:prose-invert max-w-none">
+              {parse(props.description || "")}
+            </div>
             )}
             <div className="text-4xl font-bold my-4 w-full border border-slate-200
             flex justify-center items-center rounded-xl py-12">
@@ -139,10 +138,7 @@ const CarView = (props: CarWithImagesAndMake) => {
             </Button>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {features(props).map(({ id, icon, label }) => (
-							<div
-								key={id}
-								className="bg-gray-100 rounded-lg shadow-xs p-4 text-center flex items-center flex-col"
-							>
+                <div key={id} className="bg-muted rounded-lg shadow-xs p-4 text-center flex items-center flex-col">
 								{icon}
 								<p className="text-sm font-medium mt-2">{label}</p>
 							</div>

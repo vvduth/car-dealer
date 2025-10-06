@@ -24,56 +24,54 @@ const InputSelect = (props: InputSelectProps) => {
 		props;
 
 	const form = useFormContext();
-    return (
-    <div className="w-full relative">
-      <FormField
-				control={form.control}
-				name={inputName}
-				render={({ field: { onChange, ...rest } }) => (
-					<FormItem>
-						{label && <FormLabel htmlFor={inputName}>{label}</FormLabel>}
-						<FormControl>
-							<NumberInput
-								style={{ backgroundColor: "#081a2b" }}
-								className="text-gray-500"
-								onValueChange={(values) => {
-									onChange(values.floatValue);
-								}}
-								{...rest}
-								{...numberInputProps}
-							/>
-						</FormControl>
-						<FormMessage />
-					</FormItem>
-				)}
-			/>
-			<FormField
-				control={form.control}
-				name={selectName}
-				render={({ field: { ref, ...rest } }) => (
-					<FormItem>
-						<FormControl>
-							<div className="absolute right-0 -translate-y-10 h-10 flex items-center pr-2 border-l border-l-white/10 border-input">
-								<select
-									className={cn(
-										"custom-select appearance-none pr-10 bg-no-repeat disabled:bg-white/10 border rounded-md focus:outline-hidden focus:ring-0 focus-visible:ring-0 pl-3 text-gray-500 border-transparent",
-									)}
-									{...rest}
-								>
-									{options.map((option) => (
-										<option key={option.value} value={option.label}>
-											{option.label}
-										</option>
-									))}
-								</select>
-							</div>
-						</FormControl>
-						<FormMessage className="text-sm text-red-500" />
-					</FormItem>
-				)}
-			/>
-    </div>
-  )
+  return (
+    <FormField
+      control={form.control}
+      name={inputName}
+      render={({ field: { onChange, ...rest } }) => (
+        <FormItem className="grid gap-2">
+          {label && <FormLabel htmlFor={inputName}>{label}</FormLabel>}
+          <FormControl>
+            <div className="flex items-center rounded-md border border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] h-10 py-2">
+              <NumberInput
+                className="flex-grow border-none focus:outline-none focus:ring-0 text-white min-w-0"
+                onValueChange={(values) => {
+                  onChange(values.floatValue);
+                }}
+                {...rest}
+                {...numberInputProps}
+              />
+              <div className="border-l border-l-input h-full">
+                <FormField
+                  control={form.control}
+                  name={selectName}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <select
+                          className={cn(
+                            "custom-select appearance-none bg-transparent pl-3 pr-8 text-white focus:outline-none"
+                          )}
+                          {...field}
+                        >
+                          {options.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 }
 
 export default InputSelect
