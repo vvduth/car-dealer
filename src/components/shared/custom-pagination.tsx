@@ -63,7 +63,7 @@ const CustomPagination = ({
   }, [currentPage, totalPages, maxVisiblePages]);
 
   const createPageUrl = (pageNumber: number) => {
-    const url = new URL(baseURL, process.env.NEXT_PUBLIC_APP_URL);
+    const url = new URL(baseURL, window.location.origin);
     url.searchParams.set("page", pageNumber.toString());
     return url.toString();
   };

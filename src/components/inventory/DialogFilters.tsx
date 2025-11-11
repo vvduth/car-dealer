@@ -78,7 +78,7 @@ const DialogFilters = ({
   }, [searchParams]);
 
   const clearAllFilter = () => {
-    const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
+    const url = new URL(routes.inventory, window.location.origin);
     router.replace(url.toString());
     setFiltersCount(0);
   };

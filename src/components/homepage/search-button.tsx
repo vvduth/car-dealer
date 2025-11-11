@@ -30,7 +30,7 @@ export const SearchButton = ({ count }: { count: number }) => {
 	if (minPrice) queryParams.append("minPrice", minPrice);
 	if (maxPrice) queryParams.append("maxPrice", maxPrice);
 
-	const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
+	const url = new URL(routes.inventory, typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
 	url.search = queryParams.toString();
 
 	return (

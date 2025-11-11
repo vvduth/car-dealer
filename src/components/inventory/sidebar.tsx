@@ -79,7 +79,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
   }, [searchParams]);
 
   const clearFilters = () => {
-    const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
+    const url = new URL(routes.inventory, window.location.origin);
     window.location.replace(url.toString());
     setFilterCount(0);
   };

@@ -63,9 +63,10 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      // Use relative URL for client-side navigation
       const url = new URL(
         routes.reserve(props.car.slug, MultiStepFormEnum.SUBMIT_DETAILS),
-        process.env.NEXT_PUBLIC_APP_URL
+        window.location.origin
       );
       url.searchParams.set(
         "handoverDate",
