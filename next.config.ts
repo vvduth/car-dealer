@@ -8,11 +8,7 @@ const nextConfig: NextConfig = {
 	},
   experimental: {
     authInterrupts: true,
-		nodeMiddleware: true,
-		reactCompiler: true,
-		optimizeCss: true,
-		optimizeServerReact: true,
-		optimizePackageImports: ["lucide-react", "date-fns"],
+		
   },
   async headers(){
     return [
