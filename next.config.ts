@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ hostname: "*" }],
 	qualities: [25,75]
   },
+  outputFileTracingIncludes: {
+    "/api/**/*": ["./node_modules/.prisma/client/**/*", "./node_modules/@prisma/client/**/*"],
+  },
   experimental: {
     authInterrupts: true,
   },
