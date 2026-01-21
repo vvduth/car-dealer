@@ -63,7 +63,8 @@ const CustomPagination = ({
   }, [currentPage, totalPages, maxVisiblePages]);
 
   const createPageUrl = (pageNumber: number) => {
-    const url = new URL(baseURL, window.location.origin);
+    const originalBaseURL = typeof window !== "undefined" ? window.location.origin : 'http://localhost:3000';
+    const url = new URL(baseURL, originalBaseURL);
     url.searchParams.set("page", pageNumber.toString());
     return url.toString();
   };
