@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   compress: true,
   images: {
     remotePatterns: [{ hostname: "*" }],
+	qualities: [25,75]
   },
   experimental: {
     authInterrupts: true,
